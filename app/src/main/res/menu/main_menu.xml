@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_news"
+            android:title="Новости"/>
+        <item
+            android:id="@+id/nav_tabletime"
+            android:title="Расписание хуралов"/>
+        <item
+            android:id="@+id/nav_astrology"
+            android:title="Астрологический прогноз"/>
+        <item
+            android:id="@+id/nav_order"
+            android:title="Заказать Хурал"/>
+    </group>
+
+    <item  android:title="О нас">
+        <menu>
+            <item
+                android:id="@+id/nav_history"
+                android:title="Историческая справка"/>
+            <item
+                android:id="@+id/nav_map"
+                android:title="Карта дацанов"/>
+            <item
+                android:id="@+id/nav_lecture"
+                android:title="Лекции лам"/>
+            <item
+                android:id="@+id/nav_photo"
+                android:title="Фотоальбом"/>
+            <item
+                android:id="@+id/nav_video"
+                android:title="Видеоальбом"/>
+        </menu>
+    </item>
+
+    <item android:title="О приложении">
+        <menu>
+            <item
+                android:id="@+id/nav_developers"
+                android:title="Разработчики"/>
+        </menu>
+    </item>
+</menu>
