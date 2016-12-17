@@ -22,7 +22,7 @@
                 android:title="Историческая справка"/>
             <item
                 android:id="@+id/nav_map"
-                android:title="Карта дацанов"/>
+                android:title="Дацаны Сангхи"/>
             <item
                 android:id="@+id/nav_lecture"
                 android:title="Лекции лам"/>

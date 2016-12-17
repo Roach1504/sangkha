@@ -21,11 +21,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private DrawerLayout drawer;
+    //    private Toolbar toolbar;
 
-//    private Toolbar toolbar;
-    private RecyclerAdapter recyclerAdapter;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
 
 
     @Override
@@ -37,20 +35,9 @@ public class MainActivity extends AppCompatActivity
 //        toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        toolbar.setTitle("Буддийская сангха");
 //        setSupportActionBar(toolbar);
-        ArrayList<NewsElement> newsElementArrayList = new ArrayList<NewsElement>();
-        for (int i=0; i<20; i++ )
-        {
-            newsElementArrayList.add(new NewsElement("Заголовок" +i,"Описание"+i));
 
-        }
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerAdapter = new RecyclerAdapter(newsElementArrayList , getApplicationContext());
-        recyclerView.setAdapter(recyclerAdapter);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -126,7 +113,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
 }
