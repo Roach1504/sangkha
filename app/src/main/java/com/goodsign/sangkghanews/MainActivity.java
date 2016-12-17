@@ -8,12 +8,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.NavigationView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import android.view.MenuItem;
 
-import java.util.ArrayList;
+import com.goodsign.sangkghanews.Fragment.News;
+import com.goodsign.sangkghanews.Fragment.TableTime;
+import com.goodsign.sangkghanews.Fragment.Video;
 
 /**
  * Created by Roman on 10.12.2016.
@@ -109,7 +109,10 @@ public class MainActivity extends AppCompatActivity
     else if(id==R.id.nav_video)
 
     {
-
+        Fragment fragment = new Video();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        item.setChecked(true);
+        setTitle(item.getTitle());
     }
 
 
