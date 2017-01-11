@@ -11,7 +11,9 @@ import android.support.design.widget.NavigationView;
 
 import android.view.MenuItem;
 
+import com.goodsign.sangkghanews.Fragment.LecturesList;
 import com.goodsign.sangkghanews.Fragment.News;
+import com.goodsign.sangkghanews.Fragment.Photo;
 import com.goodsign.sangkghanews.Fragment.TableTime;
 import com.goodsign.sangkghanews.Fragment.Video;
 
@@ -97,13 +99,19 @@ public class MainActivity extends AppCompatActivity
     else if(id==R.id.nav_lecture)
 
     {
-
+        Fragment fragment = LecturesList.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+        item.setChecked(true);
+        setTitle(item.getTitle());
     }
 
     else if(id==R.id.nav_photo)
 
     {
-
+        Fragment fragment = new Photo();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        item.setChecked(true);
+        setTitle(item.getTitle());
     }
 
     else if(id==R.id.nav_video)

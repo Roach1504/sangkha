@@ -13,27 +13,22 @@
         <item
             android:id="@+id/nav_order"
             android:title="Заказать Хурал"/>
+        <item
+            android:id="@+id/nav_history"
+            android:title="Историческая справка"/>
+        <item
+            android:id="@+id/nav_map"
+            android:title="Дацаны Сангхи"/>
+        <item
+            android:id="@+id/nav_lecture"
+            android:title="Лекции буддийского университета"/>
+        <item
+            android:id="@+id/nav_photo"
+            android:title="Фотоальбом"/>
+        <item
+            android:id="@+id/nav_video"
+            android:title="Видеоальбом"/>
     </group>
-
-    <item  android:title="О нас">
-        <menu>
-            <item
-                android:id="@+id/nav_history"
-                android:title="Историческая справка"/>
-            <item
-                android:id="@+id/nav_map"
-                android:title="Дацаны Сангхи"/>
-            <item
-                android:id="@+id/nav_lecture"
-                android:title="Лекции лам"/>
-            <item
-                android:id="@+id/nav_photo"
-                android:title="Фотоальбом"/>
-            <item
-                android:id="@+id/nav_video"
-                android:title="Видеоальбом"/>
-        </menu>
-    </item>
 
     <item android:title="О приложении">
         <menu>
