@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.goodsign.sangkghanews.Adapters.LecturesListRecyclerAdapter;
-import com.goodsign.sangkghanews.Models.Lecture;
+import com.goodsign.sangkghanews.Models.LectureModel;
 import com.goodsign.sangkghanews.R;
 
 import java.util.ArrayList;
@@ -47,12 +47,12 @@ public class LecturesList extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        ArrayList<Lecture> lecturesList = new ArrayList<>();
+        ArrayList<LectureModel> lecturesList = new ArrayList<>();
         for (int i = 0; i < 20; i++)
         {
-            lecturesList.add(new Lecture(i));
+            lecturesList.add(new LectureModel(i));
         }
-        recyclerAdapter = new LecturesListRecyclerAdapter(lecturesList);
+        recyclerAdapter = new LecturesListRecyclerAdapter(lecturesList, getFragmentManager());
         layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration itemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
 

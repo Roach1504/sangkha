@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView;
 
 import android.view.MenuItem;
 
+import com.goodsign.sangkghanews.Fragment.HistoryList;
 import com.goodsign.sangkghanews.Fragment.LecturesList;
 import com.goodsign.sangkghanews.Fragment.News;
 import com.goodsign.sangkghanews.Fragment.Photo;
@@ -87,7 +88,10 @@ public class MainActivity extends AppCompatActivity
     else if(id==R.id.nav_history)
 
     {
-
+        Fragment fragment = HistoryList.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+        item.setChecked(true);
+        setTitle(item.getTitle());
     }
 
     else if(id==R.id.nav_map)

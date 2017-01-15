@@ -2,14 +2,14 @@ package com.goodsign.sangkghanews.Models;
 
 import com.goodsign.sangkghanews.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Roman on 10.01.2017.
  */
 
-public class Lecture
-{
+public class LectureModel implements Serializable {
     private String name;
     private String annotation;
     private String description;
@@ -17,9 +17,14 @@ public class Lecture
     private ArrayList<String> image_urls;
     private ArrayList<String> video_urls;
 
-    public Lecture(int i)
+    public LectureModel(int i)
     {
         name = "Заголовок" + i;
+        image_urls = new ArrayList<>();
+        image_urls.add("image_url1");
+        video_urls = new ArrayList<>();
+        video_urls.add("video_url1");
+
         //annotation = String.valueOf(R.string.test_normal);
         //description = String.valueOf(R.string.test_long);
     }

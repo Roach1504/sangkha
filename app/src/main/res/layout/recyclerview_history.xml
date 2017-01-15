@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_recyclerview_lecture"
+    android:id="@+id/layout_recyclerview_history"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/text_lecture_name"
+                android:id="@+id/text_history_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="8dp">
             <TextView
-                android:id="@+id/text_lecture_annotation"
+                android:id="@+id/text_history_annotation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/test_normal"
