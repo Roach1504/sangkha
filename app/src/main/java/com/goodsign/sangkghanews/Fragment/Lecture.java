@@ -67,8 +67,9 @@ public class Lecture extends Fragment
         }
         else
         {
-            /*TextView textView = new
-            layout_videos.addView();*/
+            TextView textView = new TextView(layout_videos.getContext());
+            textView.setText(lectureModel.getVideo_urls().get(0));
+            layout_videos.addView(textView);
         }
     }
 }

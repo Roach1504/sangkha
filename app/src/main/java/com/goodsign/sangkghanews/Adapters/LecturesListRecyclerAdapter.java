@@ -55,14 +55,14 @@ public class LecturesListRecyclerAdapter extends RecyclerView.Adapter<LecturesLi
     }
 
     @Override
-    public void onBindViewHolder(LecturesListRecyclerAdapter.LecturesListViewHolder holder, int position)
+    public void onBindViewHolder(LecturesListRecyclerAdapter.LecturesListViewHolder holder, final int position)
     {
         holder.text_lectureName.setText(lecturesList.get(position).getName());
         holder.text_lectureAnnotation.setText(R.string.test_normal);
         holder.lecture_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new Lecture();
+                Fragment fragment = Lecture.newInstance(lecturesList.get(position));
                 fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             }
         });

@@ -1,5 +1,7 @@
 package com.goodsign.sangkghanews.Adapters;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.goodsign.sangkghanews.Models.HistoryModel;
 import com.goodsign.sangkghanews.R;
 
 import java.util.ArrayList;
@@ -18,7 +21,8 @@ import java.util.ArrayList;
 public class HistoriesListRecyclerAdapter extends RecyclerView.Adapter<HistoriesListRecyclerAdapter.HistoriesListViewHolder>
 {
 
-    //private ArrayList<>
+    private ArrayList<HistoryModel> historiesList;
+    private FragmentManager fragmentManager;
 
     public static class HistoriesListViewHolder extends RecyclerView.ViewHolder
     {
@@ -36,9 +40,10 @@ public class HistoriesListRecyclerAdapter extends RecyclerView.Adapter<Histories
         }
     }
 
-    public HistoriesListRecyclerAdapter(ArrayList historiesList)
+    public HistoriesListRecyclerAdapter(ArrayList<HistoryModel> historiesList, FragmentManager fragmentManager)
     {
-
+        this.fragmentManager = fragmentManager;
+        this.historiesList = historiesList;
     }
 
     @Override
@@ -49,13 +54,21 @@ public class HistoriesListRecyclerAdapter extends RecyclerView.Adapter<Histories
     }
 
     @Override
-    public void onBindViewHolder(HistoriesListViewHolder holder, int position) {
-
+    public void onBindViewHolder(HistoriesListViewHolder holder, int position)
+    {
+        holder.text_historyName.setText(historiesList.get(position).getName());
+        holder.text_historyAnnotation.setText(R.string.test_normal);
+        holder.history_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Fragment fragment =
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return historiesList.size();
     }
 
 }
