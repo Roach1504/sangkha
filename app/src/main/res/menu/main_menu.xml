@@ -5,7 +5,7 @@
             android:id="@+id/nav_news"
             android:title="Новости"/>
         <item
-            android:id="@+id/nav_tabletime"
+            android:id="@+id/nav_hoorals"
             android:title="Расписание хуралов"/>
         <item
             android:id="@+id/nav_astrology"
@@ -17,7 +17,7 @@
             android:id="@+id/nav_history"
             android:title="Историческая справка"/>
         <item
-            android:id="@+id/nav_map"
+            android:id="@+id/nav_datsans"
             android:title="Дацаны Сангхи"/>
         <item
             android:id="@+id/nav_lecture"

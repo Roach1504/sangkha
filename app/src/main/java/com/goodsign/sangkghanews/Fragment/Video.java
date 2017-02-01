@@ -1,5 +1,9 @@
 package com.goodsign.sangkghanews.Fragment;
 
+/**
+ * Created by Машка on 11.01.2017.
+ */
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.goodsign.sangkghanews.Adapters.FragmentVideoRecyclerAdapter;
+import com.goodsign.sangkghanews.Adapters.VideoListRecyclerAdapter;
 import com.goodsign.sangkghanews.Models.NewsVideo;
 import com.goodsign.sangkghanews.R;
 
@@ -19,14 +23,14 @@ import java.util.ArrayList;
  * Created by Машка on 17.12.2016.
  */
 public class Video extends Fragment {
-    private FragmentVideoRecyclerAdapter fragmentVideoRecyclerAdapter;
+    private VideoListRecyclerAdapter videoListRecyclerAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view=inflater.inflate(R.layout.fragment_video, container,false);
+        View view=inflater.inflate(R.layout.fragment_list_video, container,false);
         ArrayList<NewsVideo> newsVideoArrayList = new ArrayList<NewsVideo>();
         for (int i=0; i<20; i++ )
         {
@@ -36,8 +40,9 @@ public class Video extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        fragmentVideoRecyclerAdapter = new FragmentVideoRecyclerAdapter(newsVideoArrayList , getActivity().getApplicationContext());
-        recyclerView.setAdapter(fragmentVideoRecyclerAdapter);
+        videoListRecyclerAdapter = new VideoListRecyclerAdapter(newsVideoArrayList , getActivity().getApplicationContext());
+        recyclerView.setAdapter(videoListRecyclerAdapter);
         return view;
     }
+
 }

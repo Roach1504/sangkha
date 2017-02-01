@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">Буддийская сангха</string>
+    <string name="app_name">Сангха онлайн</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
+
+    <string name="order_hooral">Заказать онлайн</string>
 
     <string name="test_short">Lorem ipsum dolor sit amet</string>
     <string name="test_normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit,

@@ -14,16 +14,17 @@ public class LectureModel implements Serializable {
     private String annotation;
     private String description;
 
-    private ArrayList<String> image_urls;
-    private ArrayList<String> video_urls;
+    private ArrayList<String> imageList;
+    private ArrayList<NewsVideo> videosList;
 
     public LectureModel(int i)
     {
         name = "Заголовок" + i;
-        image_urls = new ArrayList<>();
-        image_urls.add("image_url1");
-        video_urls = new ArrayList<>();
-        video_urls.add("video_url1");
+        imageList = new ArrayList<>();
+        imageList.add("image_url1");
+        videosList = new ArrayList<>();
+        videosList.add(new NewsVideo("video_url1"));
+        videosList.add(new NewsVideo("video_url2"));
 
         //annotation = String.valueOf(R.string.test_normal);
         //description = String.valueOf(R.string.test_long);
@@ -41,11 +42,12 @@ public class LectureModel implements Serializable {
         return description;
     }
 
-    public ArrayList<String> getImage_urls() {
-        return image_urls;
+    public ArrayList<String> getImages() {
+        return imageList;
     }
 
-    public ArrayList<String> getVideo_urls() {
-        return video_urls;
+    public ArrayList<NewsVideo> getVideos()
+    {
+        return videosList;
     }
 }

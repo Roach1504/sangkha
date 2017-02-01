@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.goodsign.sangkghanews.Fragment.History;
 import com.goodsign.sangkghanews.Models.HistoryModel;
 import com.goodsign.sangkghanews.R;
 
@@ -54,14 +55,15 @@ public class HistoriesListRecyclerAdapter extends RecyclerView.Adapter<Histories
     }
 
     @Override
-    public void onBindViewHolder(HistoriesListViewHolder holder, int position)
+    public void onBindViewHolder(HistoriesListViewHolder holder, final int position)
     {
         holder.text_historyName.setText(historiesList.get(position).getName());
         holder.text_historyAnnotation.setText(R.string.test_normal);
         holder.history_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Fragment fragment =
+                Fragment fragment = History.newInstance(historiesList.get(position));
+                fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.container, fragment).commit();
             }
         });
     }
