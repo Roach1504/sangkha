@@ -1,9 +1,10 @@
-package com.goodsign.sangkghanews.Adapters;
+package com.goodsign.sangkghanews.adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.goodsign.sangkghanews.Models.NewsVideo;
+import com.goodsign.sangkghanews.models.VideoModel;
 import com.goodsign.sangkghanews.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.ArrayList;
 
@@ -20,26 +24,35 @@ import java.util.ArrayList;
  * Created by Машка on 17.12.2016.
  */
 
-public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecyclerAdapter.FragmentVideoViewHolder> {
+public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecyclerAdapter.FragmentVideoViewHolder>
+{
     private Context context;
-    private ArrayList<NewsVideo> newsVideoArrayList;
-//    private FragmentManager fragmentManager;
+    private ArrayList<VideoModel> videoList;
+    private DisplayImageOptions displayImageOptions;
 
-    public VideoListRecyclerAdapter(ArrayList<NewsVideo> newsVideoArrayList, Context context) {
+    public VideoListRecyclerAdapter(ArrayList<VideoModel> videoList, Context context)
+    {
         this.context = context;
-        this.newsVideoArrayList = newsVideoArrayList;
-//        this.fragmentManager = fragmentManager;
+        this.videoList = videoList;
+        displayImageOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.video_stub)
+                .showImageForEmptyUri(R.drawable.video_stub)
+                .showImageOnFail(R.drawable.video_stub)
+                .cacheInMemory(true)
+                .cacheOnDisk(false)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
+                .build();
     }
 
     public static class FragmentVideoViewHolder extends RecyclerView.ViewHolder{
-        ImageView imgViewVideo;
-        TextView txtViewVideo;
+        ImageView image;
+        TextView title;
         LinearLayout linearLayout;
 
         public FragmentVideoViewHolder(View itemView) {
             super(itemView);
-            imgViewVideo = (ImageView) itemView.findViewById(R.id.imageView1);
-            txtViewVideo = (TextView) itemView.findViewById(R.id.textView1);
+            image = (ImageView) itemView.findViewById(R.id.imageView1);
+            title = (TextView) itemView.findViewById(R.id.textView1);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.layout_video);
         }
     }
@@ -54,13 +67,17 @@ public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecy
 
     @Override
     public void onBindViewHolder(FragmentVideoViewHolder holder, final int position) {
-        holder.txtViewVideo.setText(newsVideoArrayList.get(position).getHeader());
+        holder.title.setText(videoList.get(position).getTitle());
+        final String video_url = videoList.get(position).getVideo_url();
+        String video_id = video_url.substring(video_url.lastIndexOf("/")+1, video_url.length());
+        Log.e("Index", video_id);
+        ImageLoader.getInstance().displayImage("http://img.youtube.com/vi/"+video_id+"/default.jpg", holder.image);
+
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                 /*Fragment fragment = new Video();*/
-                //fragmentManager.beginTransaction().replace(R.id.container,fragment).addToBackStack(null).commit();
-                Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+            public void onClick(View view)
+            {
+                Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(video_url));
                 browseIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(browseIntent);
             }
@@ -70,8 +87,12 @@ public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecy
 
     @Override
     public int getItemCount() {
-        return newsVideoArrayList.size();
+        return videoList.size();
     }
 
-
+    public void updateList(ArrayList<VideoModel> videoList)
+    {
+        this.videoList = videoList;
+        notifyDataSetChanged();
+    }
 }

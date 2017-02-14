@@ -1,46 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:id="@+id/album_layout">
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp"
-        card_view:cardElevation="1dp"
-        card_view:cardUseCompatPadding="true"
-        android:id="@+id/cardView"
-        card_view:cardBackgroundColor="#86ffff">
+    android:layout_margin="5dp"
+    android:id="@+id/layout_album">
         <android.support.percent.PercentRelativeLayout
-
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/photo_album"
-                app:layout_widthPercent="90%"
-                app:layout_heightPercent="70%"
-                app:layout_marginTopPercent="5%"
-                app:layout_marginLeftPercent="5%"/>
+            <LinearLayout
+                app:layout_widthPercent="100%"
+                app:layout_heightPercent="100%">
+                <ImageView
+                    android:id="@+id/image_album"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"/>
+            </LinearLayout>
+            <LinearLayout
+                app:layout_widthPercent="100%"
+                app:layout_heightPercent="15%"
+                app:layout_marginTopPercent="85%"
+                app:layout_marginLeftPercent="0%"
+                android:background="@color/primary_text_alpha">
+                <TextView
+                    android:id="@+id/text_album_title"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="80"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
+                    android:textSize="12sp"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+
             <TextView
-                android:textColor="@color/secondary_text"
-                android:id="@+id/text_album_name"
-                app:layout_widthPercent="90%"
-                app:layout_heightPercent="12%"
-                app:layout_marginTopPercent="5%"
-                app:layout_marginLeftPercent="5%"/>
-            <TextView
-                android:id="@+id/text_album_null"
+                android:id="@+id/text_album_description"
                 app:layout_widthPercent="90%"
                 app:layout_heightPercent="8%"
                 app:layout_marginTopPercent="5%"
                 app:layout_marginLeftPercent="5%"/>
+
         </android.support.percent.PercentRelativeLayout>
-
-    </android.support.v7.widget.CardView>
-
-
 </LinearLayout>

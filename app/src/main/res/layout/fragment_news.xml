@@ -72,18 +72,38 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:padding="2dp"
                     android:orientation="vertical">
                         <TextView
+                            android:id="@+id/text_news_title"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:text="@string/test_short"/>
+                            android:textSize="16sp"
+                            android:textColor="@color/primary_text"/>
                         <TextView
+                            android:id="@+id/text_news_annotation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:textSize="14sp"
                             android:lineSpacingExtra="8dp"
-                            android:text="@string/test_long"
+                            android:textColor="@color/primary_text"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:textAppearance="@style/AppTheme.TextAppearanceHtml"
                             />
+                        <org.sufficientlysecure.htmltextview.HtmlTextView
+                            android:id="@+id/text_news_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/AppTheme.TextAppearanceHtml"
+                            />
+                        <TextView
+                            android:id="@+id/text_news_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10dp"
+                            android:textColor="@color/secondary_text"
+                            android:textAlignment="viewEnd"/>
                 </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

@@ -1,4 +1,4 @@
-package com.goodsign.sangkghanews.Adapters;
+package com.goodsign.sangkghanews.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

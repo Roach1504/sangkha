@@ -1,13 +1,14 @@
 package com.goodsign.sangkghanews;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,28 +20,41 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.goodsign.sangkghanews.Fragment.Album;
-import com.goodsign.sangkghanews.Fragment.DatsansList;
-import com.goodsign.sangkghanews.Fragment.HistoryList;
-import com.goodsign.sangkghanews.Fragment.HooralsByDays;
-import com.goodsign.sangkghanews.Fragment.LecturesList;
-import com.goodsign.sangkghanews.Fragment.News;
-import com.goodsign.sangkghanews.Fragment.NewsList;
-import com.goodsign.sangkghanews.Fragment.Photo;
-import com.goodsign.sangkghanews.Fragment.TableTime;
-import com.goodsign.sangkghanews.Fragment.Video;
-import com.goodsign.sangkghanews.Fragment.VideoList;
-import com.goodsign.sangkghanews.Fragment.ZurhaiByDays;
-import com.goodsign.sangkghanews.R;
+import com.goodsign.sangkghanews.fragments.Album;
+import com.goodsign.sangkghanews.fragments.BackStackResumedFragment;
+import com.goodsign.sangkghanews.fragments.DatsansList;
+import com.goodsign.sangkghanews.fragments.HistoryList;
+import com.goodsign.sangkghanews.fragments.HooralsByDays;
+import com.goodsign.sangkghanews.fragments.LecturesList;
+import com.goodsign.sangkghanews.fragments.News;
+import com.goodsign.sangkghanews.fragments.NewsList;
+import com.goodsign.sangkghanews.fragments.VideoList;
+import com.goodsign.sangkghanews.fragments.ZurhaiByDays;
+import com.goodsign.sangkghanews.handlers.HttpRequestHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Roman on 10.12.2016.
  */
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener
+{
     private DrawerLayout drawer;
     private Toolbar toolbar;
+    private NavigationView navigationView;
 
     private final int WRITE_EXTERNAL_STORAGE_REQUEST = 1;
 
@@ -52,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        getSupportActionBar().setIcon(R.drawable.ic_koleso48);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Сангкха онлайн");
+        toolbar.setTitle("СангкхаOnline");
         setSupportActionBar(toolbar);
 
         checkPermissions();
@@ -62,8 +76,158 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged()
+            {
+                //TODO доделать
+                FragmentManager manager = getSupportFragmentManager();
+                if (manager != null)
+                {
+                    BackStackResumedFragment currentFragment = (BackStackResumedFragment) manager.findFragmentById(R.id.container);
+                    currentFragment.onFragmentResume();
+
+                    if (currentFragment instanceof NewsList)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_news);
+                    }
+                    else if (currentFragment instanceof HooralsByDays)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_hoorals);
+                    }
+                    else if (currentFragment instanceof ZurhaiByDays)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_astrology);
+                    }
+                    else if (currentFragment instanceof HistoryList)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_history);
+                    }
+                    else if (currentFragment instanceof DatsansList)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_datsans);
+                    }
+                    else if (currentFragment instanceof LecturesList)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_lecture);
+                    }
+                    else if (currentFragment instanceof Album)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_photo);
+                    }
+                    else if (currentFragment instanceof VideoList)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_video);
+                    }
+                }
+            }
+        });
+
+        class TestConnectServer extends AsyncTask<Void, Void, Void> {
+
+
+
+            protected String getStatus(String key, String strJson) {
+                JSONObject dataJsonObj = null;
+                String secondName = "";
+                try {
+                    dataJsonObj = new JSONObject(strJson);
+                    secondName = dataJsonObj.getString(key);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return secondName;
+            }
+
+            protected Void doInBackground(Void... params) {
+                try {
+
+
+                    Log.e("START CONNECT", "ff");
+                    OkHttpClient client = new OkHttpClient();
+
+                    RequestBody formBody = new FormBody.Builder()
+                            .addEncoded("page", "2")
+                            .build();
+
+
+                    Request request = new Request.Builder()
+.url("http://195.133.144.16/api/news")
+//.url("http://195.133.144.16/api/datsans")
+//.url("http://195.133.144.16/api/history")
+//.url("http://195.133.144.16/api/hurals")
+//                            .url("http://195.133.144.16/api/history")
+//.url("http://195.133.144.16/api/lectures")
+//.url("http://195.133.144.16/api/photos")
+//.url("http://195.133.144.16/api/videos")
+//.url("http://195.133.144.16/api/zurkhay")
+                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                            .post(formBody)
+//.get()
+                            .build();
+
+                    okhttp3.Call call = client.newCall(request);
+                    Response response = call.execute();
+                    Callback callback = new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+
+                        }
+                    };
+
+                    callback.onResponse(call, response);
+                    String message = response.body().string().trim();
+
+                    Log.e("ответ от сервера ", message);
+
+//Log.e(TAG, "message GPS1 = " + message);
+//Log.e(TAG, "Вот прям точно ушли");
+// idreg = getStatus("id",srt);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+            }
+        }
+
+
+        TestConnectServer in1 = new TestConnectServer();
+        in1.execute();
+
+//        Callback callback = new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException
+//            {
+//                Log.e("response", response.body().string().trim());
+//            }
+//        };
+//        HttpRequestHandler.getInstance().setCallback(callback);
+//        HttpRequestHandler.getInstance().postWithParams("/api/news", 1);
+//
+//        if (savedInstanceState == null)
+//        {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.container, NewsList.newInstance()).commit();
+//            navigationView.setCheckedItem(R.id.nav_news);
+//        }
 
     }
 
@@ -73,82 +237,60 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if(id==R.id.nav_news)
-
         {
-            Fragment fragment = new NewsList();
+            Fragment fragment = NewsList.newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
-
         else if(id==R.id.nav_hoorals)
-
         {
             Fragment fragment = HooralsByDays.newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
-
         else if(id==R.id.nav_astrology)
-
         {
             Fragment fragment = ZurhaiByDays.newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             item.setChecked(true);
         }
-
-        else if(id==R.id.nav_order)
-
-        {
-
-        }
-
         else if(id==R.id.nav_history)
-
         {
             Fragment fragment = HistoryList.newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
-
         else if(id==R.id.nav_datsans)
-
         {
             Fragment fragment = DatsansList.newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).addToBackStack(null).commit();
             item.setChecked(true);
             //setTitle(item.getTitle());
         }
-
         else if(id==R.id.nav_lecture)
-
         {
             Fragment fragment = LecturesList.newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
-
         else if(id==R.id.nav_photo)
-
         {
             Fragment fragment = Album.newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
-
         else if(id==R.id.nav_video)
-
         {
             Fragment fragment = new VideoList();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
-
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -194,10 +336,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        }
+        else
+        {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+            {
+                getSupportFragmentManager().popBackStack();
+            }
+            else
+            {
+                super.onBackPressed();
+            }
         }
     }
 }

@@ -1,47 +1,33 @@
-package com.goodsign.sangkghanews.Models;
+package com.goodsign.sangkghanews.models;
 
-import android.media.Image;
+import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  * Created by Машка on 17.01.2017.
  */
 
-public class PhotoModel {
-    private String image_url;
-    private String header;
-    private String body;
+public class PhotoModel implements Serializable {
+    private int id_photos;
+    private int album;
+    private String image;
+    @SerializedName("short")
+    private String description;
 
-    public PhotoModel() {
-
+    public int getId() {
+        return id_photos;
     }
 
-    public PhotoModel(String image_url,String header,String body){
-        this.image_url = image_url;
-        this.header = header;
-        this.body = body;
-    }
-    public String getImage_url() {
-        return image_url;
+    public String getImage() {
+        return image;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
-    }
-    public String getHeader() {
-        return header;
+    public String getDescription() {
+        return description;
     }
 
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
+    public int getAlbum() {
+        return album;
     }
 }

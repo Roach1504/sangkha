@@ -1,13 +1,20 @@
-package com.goodsign.sangkghanews.Adapters;
+package com.goodsign.sangkghanews.adapters;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
-import com.goodsign.sangkghanews.Fragment.HooralsList;
+import com.goodsign.sangkghanews.fragments.HooralsList;
+import com.goodsign.sangkghanews.handlers.HttpRequestHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by Roman on 18.01.2017.
@@ -15,37 +22,25 @@ import java.util.ArrayList;
 
 public class HooralsPagerAdapter extends FragmentStatePagerAdapter
 {
-    private FragmentManager parentManager;
     private ArrayList<HooralsList> hooralsList;
+    private TabLayout tabLayout;
 
-    public HooralsPagerAdapter(FragmentManager fm, FragmentManager parentManager)
+    public HooralsPagerAdapter(FragmentManager fm, ArrayList<HooralsList> hooralsList, TabLayout tabLayout)
     {
         super(fm);
-        this.parentManager = parentManager;
-        hooralsList = new ArrayList<>();
-        for (int i = 0; i < 7; i++)
-        {
-            hooralsList.add(new HooralsList());
-        }
+        this.hooralsList = hooralsList;
+        this.tabLayout = tabLayout;
     }
 
     @Override
-    public Fragment getItem(int position) {
-//        Log.e("POSITION", position + "");
-        switch (position)
+    public Fragment getItem(int position)
+    {
+        if (tabLayout != null)
         {
-//            case 0:
-//                f = DialogueListFragment.newInstance(parentManager);
-//                break;
-//            case 1:
-//                f = ChatListFragment.newInstance(parentManager);
-//                break;
-//            case 2:
-//                f = AnnouncementListFragment.newInstance(parentManager);
-//                break;
-//            case 3:
-//                f = SupportListFragment.newInstance(parentManager);
-//                break;
+            if (tabLayout.getTabAt(position) != null)
+            {
+                tabLayout.getTabAt(position).setText(hooralsList.get(position).getDateFromModel());
+            }
         }
         return hooralsList.get(position);
     }
@@ -56,32 +51,33 @@ public class HooralsPagerAdapter extends FragmentStatePagerAdapter
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        String title = "";
-        switch (position)
+    public CharSequence getPageTitle(int position)
+    {
+        return hooralsList.get(position).getDateFromModel();
+    }
+
+    public void updateList(ArrayList<HooralsList> hooralsList)
+    {
+        //TODO Говнокод перед дедлайном, желательно исправить
+        this.hooralsList = hooralsList;
+        notifyDataSetChanged();
+        for (int i = 0; i < getCount(); i++)
         {
-            case 0:
-                title ="пн";
-                break;
-            case 1:
-                title = "вт";
-                break;
-            case 2:
-                title = "ср";
-                break;
-            case 3:
-                title = "чт";
-                break;
-            case 4:
-                title = "пт";
-                break;
-            case 5:
-                title = "сб";
-                break;
-            case 6:
-                title = "вс";
-                break;
+            try
+            {
+                tabLayout.getTabAt(i).setText(getPageTitle(i));
+                Log.e("KEKEKEKEKE", "EKELELEKEK");
+            }
+            catch (IndexOutOfBoundsException e)
+            {
+                tabLayout.addTab(tabLayout.newTab().setText(getPageTitle(i)));
+            }
         }
-        return title;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 }

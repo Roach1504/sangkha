@@ -11,9 +11,6 @@
             android:id="@+id/nav_astrology"
             android:title="Астрологический прогноз"/>
         <item
-            android:id="@+id/nav_order"
-            android:title="Заказать Хурал"/>
-        <item
             android:id="@+id/nav_history"
             android:title="Историческая справка"/>
         <item

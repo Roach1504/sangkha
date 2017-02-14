@@ -1,38 +1,30 @@
-package com.goodsign.sangkghanews.Models;
+package com.goodsign.sangkghanews.models;
 
-import com.goodsign.sangkghanews.R;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by Roman on 10.01.2017.
  */
 
 public class LectureModel implements Serializable {
-    private String name;
+    int id;
+    private String date;
+    private String title;
+    @SerializedName("short")
     private String annotation;
+    @SerializedName("text")
     private String description;
+      private String image;
 
-    private ArrayList<String> imageList;
-    private ArrayList<NewsVideo> videosList;
-
-    public LectureModel(int i)
-    {
-        name = "Заголовок" + i;
-        imageList = new ArrayList<>();
-        imageList.add("image_url1");
-        videosList = new ArrayList<>();
-        videosList.add(new NewsVideo("video_url1"));
-        videosList.add(new NewsVideo("video_url2"));
-
-        //annotation = String.valueOf(R.string.test_normal);
-        //description = String.valueOf(R.string.test_long);
+    public int getId() {
+        return id;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getTitle() { return title; }
+
+    public String getDate() { return date; }
 
     public String getAnnotation() {
         return annotation;
@@ -42,12 +34,5 @@ public class LectureModel implements Serializable {
         return description;
     }
 
-    public ArrayList<String> getImages() {
-        return imageList;
-    }
-
-    public ArrayList<NewsVideo> getVideos()
-    {
-        return videosList;
-    }
+    public String getImage() { return image; }
 }
