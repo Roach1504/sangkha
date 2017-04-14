@@ -72,23 +72,30 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="2dp"
+                    android:layout_margin="3dp"
                     android:orientation="vertical">
                         <TextView
                             android:id="@+id/text_news_title"
+                            android:textAlignment="center"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:textSize="16sp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="50dp"
+                            android:textSize="18sp"
                             android:textColor="@color/primary_text"/>
+                        <TextView
+                            android:id="@+id/text_news_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12dp"
+                            android:textColor="@color/secondary_text"
+                            android:textAlignment="viewEnd"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginRight="5dp"/>
                         <TextView
                             android:id="@+id/text_news_annotation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:lineSpacingExtra="8dp"
-                            android:textColor="@color/primary_text"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp"
                             android:textAppearance="@style/AppTheme.TextAppearanceHtml"
                             />
                         <org.sufficientlysecure.htmltextview.HtmlTextView
@@ -97,13 +104,6 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/AppTheme.TextAppearanceHtml"
                             />
-                        <TextView
-                            android:id="@+id/text_news_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="10dp"
-                            android:textColor="@color/secondary_text"
-                            android:textAlignment="viewEnd"/>
                 </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

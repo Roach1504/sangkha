@@ -35,9 +35,9 @@ public class PhotoListRecyclerAdapter extends RecyclerView.Adapter<PhotoListRecy
         this.photoList = photoList;
         this.fragmentManager = fragmentManager;
         displayImageOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.video_stub)
-                .showImageForEmptyUri(R.drawable.video_stub)
-                .showImageOnFail(R.drawable.video_stub)
+                .showImageOnLoading(R.drawable.pic_stub_192)
+                .showImageForEmptyUri(R.drawable.pic_stub_192)
+                .showImageOnFail(R.drawable.pic_fail_512)
                 .cacheInMemory(false)
                 .cacheOnDisk(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
@@ -67,8 +67,19 @@ public class PhotoListRecyclerAdapter extends RecyclerView.Adapter<PhotoListRecy
     @Override
     public void onBindViewHolder(PhotoListRecyclerViewHolder holder, final int position)
     {
-        ImageLoader.getInstance().displayImage(HttpRequestHandler.getInstance().getAbsoluteUrl(photoList.get(position).getImage()),
-                holder.image, displayImageOptions);
+        String image_url = photoList.get(position).getImage();
+        if (!image_url.equals(""))
+        {
+            if (image_url.contains("uploads") && (!image_url.contains("http") || !image_url.contains("https")))
+            {
+                ImageLoader.getInstance().displayImage(HttpRequestHandler.getInstance().getAbsoluteUrl(image_url), holder.image, displayImageOptions);
+            }
+            else
+            {
+                ImageLoader.getInstance().displayImage(image_url, holder.image, displayImageOptions);
+            }
+        }
+
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)

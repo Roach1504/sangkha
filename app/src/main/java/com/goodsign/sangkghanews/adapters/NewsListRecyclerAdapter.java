@@ -43,16 +43,18 @@ public class NewsListRecyclerAdapter extends RecyclerView.Adapter<NewsListRecycl
         TextView annotation;
         TextView date;
         LinearLayout linearLayout;
+        LinearLayout imageLayout;
 
 
         public NewsListViewHolder(View itemView) {
             super(itemView);
 
-                image = (ImageView) itemView.findViewById(R.id.image_news);
-                title = (TextView) itemView.findViewById(R.id.text_news_title);
-                annotation = (TextView) itemView.findViewById(R.id.text_news_annotation);
-                date = (TextView) itemView.findViewById(R.id.text_news_date);
-                linearLayout = (LinearLayout) itemView.findViewById(R.id.layout_news);
+            image = (ImageView) itemView.findViewById(R.id.image_news);
+            title = (TextView) itemView.findViewById(R.id.text_news_title);
+            annotation = (TextView) itemView.findViewById(R.id.text_news_annotation);
+            date = (TextView) itemView.findViewById(R.id.text_news_date);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.layout_news);
+            imageLayout = (LinearLayout) itemView.findViewById(R.id.layout_news_image);
         }
     }
 
@@ -62,6 +64,9 @@ public class NewsListRecyclerAdapter extends RecyclerView.Adapter<NewsListRecycl
         this.fragmentManager = fragmentManager;
         this.layoutManager = layoutManager;
         displayImageOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.pic_stub_192)
+                .showImageForEmptyUri(R.drawable.pic_stub_192)
+                .showImageOnFail(R.drawable.pic_fail_512)
                 .cacheInMemory(false)
                 .cacheOnDisk(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
@@ -92,7 +97,26 @@ public class NewsListRecyclerAdapter extends RecyclerView.Adapter<NewsListRecycl
                 holder.title.setText(newsList.get(position).getTitle());
             }
 
-            imageLoader.displayImage(HttpRequestHandler.getInstance().getAbsoluteUrl(newsList.get(position).getImagepath()), holder.image, displayImageOptions);
+            String image_url = newsList.get(position).getImagepath();
+            if (!image_url.equals(""))
+            {
+                if (image_url.contains("uploads") && (!image_url.contains("http") || !image_url.contains("https")))
+                {
+                    ImageLoader.getInstance().displayImage(HttpRequestHandler.getInstance().getAbsoluteUrl(image_url), holder.image, displayImageOptions);
+                }
+                else
+                {
+//                    holder.imageLayout.setVisibility(View.VISIBLE);
+//                    holder.image.setVisibility(View.VISIBLE);
+                    ImageLoader.getInstance().displayImage(image_url, holder.image, displayImageOptions);
+                }
+            }
+            else
+            {
+//                holder.imageLayout.setVisibility(View.GONE);
+//                holder.image.setVisibility(View.GONE);
+                holder.image.setImageResource(R.drawable.pic_stub_192);
+            }
 
             String s = null;
             if (newsList.get(position).getAnnotation().length() > 100) {

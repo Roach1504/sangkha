@@ -36,9 +36,9 @@ public class LecturesListRecyclerAdapter extends RecyclerView.Adapter<LecturesLi
         this.fragmentManager = fragmentManager;
         this.lecturesList = lecturesList;
         displayImageOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.video_stub)
-                .showImageForEmptyUri(R.drawable.video_stub)
-                .showImageOnFail(R.drawable.video_stub)
+                .showImageOnLoading(R.drawable.pic_stub_192)
+                .showImageForEmptyUri(R.drawable.pic_fail_512)
+                .showImageOnFail(R.drawable.pic_fail_512)
                 .cacheInMemory(false)
                 .cacheOnDisk(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)

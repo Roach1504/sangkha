@@ -69,19 +69,47 @@ public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecy
     public void onBindViewHolder(FragmentVideoViewHolder holder, final int position) {
         holder.title.setText(videoList.get(position).getTitle());
         final String video_url = videoList.get(position).getVideo_url();
-        String video_id = video_url.substring(video_url.lastIndexOf("/")+1, video_url.length());
-        Log.e("Index", video_id);
-        ImageLoader.getInstance().displayImage("http://img.youtube.com/vi/"+video_id+"/default.jpg", holder.image);
-
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
+        if (video_url != null)
+        {
+            if (!video_url.contains("http"))
             {
-                Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(video_url));
-                browseIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(browseIntent);
+                String video_id = video_url.substring(video_url.lastIndexOf("/") + 1, video_url.length());
+//            Log.e("Index", video_id);
+                ImageLoader.getInstance().displayImage("http://img.youtube.com/vi/"+video_id+"/default.jpg", holder.image);
+                holder.linearLayout.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https:" + video_url));
+                        browseIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(browseIntent);
+                    }
+                });
             }
-        });
+            else
+            {
+//                ImageLoader.getInstance().displayImage("assets://video_stub.PNG", holder.image);
+                holder.image.setImageResource(R.drawable.video_stub);
+                holder.linearLayout.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(video_url));
+                        browseIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(browseIntent);
+                    }
+                });
+            }
+        }
+        else
+        {
+//            ImageLoader.getInstance().displayImage("assets://video_stub.PNG", holder.image);
+//            holder.image.setImageResource(R.drawable.video_stub);
+            videoList.remove(position);
+            notifyItemRemoved(position);
+        }
 
     }
 

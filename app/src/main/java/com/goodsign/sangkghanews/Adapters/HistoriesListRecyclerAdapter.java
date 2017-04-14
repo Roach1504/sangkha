@@ -57,9 +57,9 @@ public class HistoriesListRecyclerAdapter extends RecyclerView.Adapter<Histories
         this.fragmentManager = fragmentManager;
         this.historiesList = historiesList;
         displayImageOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.video_stub)
-                .showImageForEmptyUri(R.drawable.video_stub)
-                .showImageOnFail(R.drawable.video_stub)
+                .showImageOnLoading(R.drawable.pic_stub_192)
+                .showImageForEmptyUri(R.drawable.pic_fail_512)
+                .showImageOnFail(R.drawable.pic_fail_512)
                 .cacheInMemory(false)
                 .cacheOnDisk(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
@@ -96,25 +96,29 @@ public class HistoriesListRecyclerAdapter extends RecyclerView.Adapter<Histories
         {
             holder.annotation.setText(historiesList.get(position).getAnnotation());
         }*/
+        if (historiesList.get(position).getTitle() != null)
         holder.title.setText(historiesList.get(position).getTitle());
-        String image_url = historiesList.get(position).getImage();
-        //TODO сделать подобную проверку для всех вызовов imageloader
-        if (!image_url.equals(""))
+        if (historiesList.get(position).getImage() != null)
         {
-            if (image_url.contains("uploads") && (!image_url.contains("http") || !image_url.contains("https")))
-            {
-                ImageLoader.getInstance().displayImage(HttpRequestHandler.getInstance().getAbsoluteUrl(image_url), holder.image, displayImageOptions);
-            }
-            else
-            {
-                ImageLoader.getInstance().displayImage(image_url, holder.image, displayImageOptions);
-            }
+            String image_url = historiesList.get(position).getImage();
+            //TODO сделать подобную проверку для всех вызовов imageloader
+            if (!image_url.equals("")) {
+                if (image_url.contains("uploads") && (!image_url.contains("http") || !image_url.contains("https"))) {
+                    ImageLoader.getInstance().displayImage(HttpRequestHandler.getInstance().getAbsoluteUrl(image_url), holder.image, displayImageOptions);
+                } else {
+                    ImageLoader.getInstance().displayImage(image_url, holder.image, displayImageOptions);
+                }
 
+            }else
+            {
+                holder.image.setVisibility(View.GONE);
+            }
         }
         else
         {
             holder.image.setVisibility(View.GONE);
         }
+
 //        ImageLoader.getInstance().displayImage(HttpRequestHandler.getInstance().getAbsoluteUrl("/uploads/fb60f5284700f2e67bc7c702878bfef1.jpg"), holder.image, displayImageOptions);
         holder.annotation.setText(historiesList.get(position).getAnnotation());
         holder.date.setText(historiesList.get(position).getDate());

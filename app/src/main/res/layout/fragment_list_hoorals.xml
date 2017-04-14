@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/layout_hoorals"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -12,17 +14,22 @@
             android:background="@color/primary"
             app:tabMode="scrollable"
             android:layout_alignParentTop="true"
-            android:id="@+id/layout_hoorals"
+            android:id="@+id/layout_tab_hoorals"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:tabSelectedTextColor="#ffffff"
             />
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:layout_below="@id/layout_hoorals"
-        android:id="@+id/viewpager_hoorals"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layout_refresh_hoorals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:layout_weight="90">
+        <android.support.v4.view.ViewPager
+            android:layout_below="@id/layout_hoorals"
+            android:id="@+id/viewpager_hoorals"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

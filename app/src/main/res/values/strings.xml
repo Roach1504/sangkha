@@ -1,9 +1,17 @@
 <resources>
-    <string name="app_name">СангхаOnline</string>
+    <string name="app_name">Буддизм России</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
 
     <string name="order_hooral">Заказать онлайн</string>
+    <string name="no_connection">Сетевая ошибка, проверьте подключение</string>
+    <string name="refresh">Обновить</string>
+    
+    <!-- Заказ хурала онлайн -->
+    <string name="fullname_hooral">Введите ФИО человека</string>
+    <string name="birthdate_hooral">Введите дату рождения</string>
+    <string name="sum_hooral">Введите сумму пожертвования</string>
+    <string name="complete_order_hooral">Оплатить хурал</string>
 
     <string name="test_short">Lorem ipsum dolor sit amet</string>
     <string name="test_normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit,

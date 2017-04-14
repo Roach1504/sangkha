@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,12 +36,14 @@ public class DatsanListRecyclerAdapter extends RecyclerView.Adapter<DatsanListRe
         HtmlTextView text;
         ExpandableRelativeLayout expandableRelativeLayout;
         LinearLayout linearLayout;
+        ImageView arrow;
         public DatsansViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.text_datsan_title);
             text = (HtmlTextView) itemView.findViewById(R.id.text_datsan_description);
             expandableRelativeLayout = (ExpandableRelativeLayout) itemView.findViewById(R.id.layout_expandable);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.layout_datsan);
+            arrow = (ImageView) itemView.findViewById(R.id.image_datsans_arrow);
         }
     }
     @Override
@@ -63,6 +66,14 @@ public class DatsanListRecyclerAdapter extends RecyclerView.Adapter<DatsanListRe
             @Override
             public void onClick(View view)
             {
+                if (holder.expandableRelativeLayout.isExpanded())
+                {
+                    holder.arrow.setRotation(0);
+                }
+                else
+                {
+                    holder.arrow.setRotation(90);
+                }
                 holder.expandableRelativeLayout.toggle();
             }
         });

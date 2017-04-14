@@ -38,9 +38,9 @@ public class AlbumListRecyclerAdapter extends RecyclerView.Adapter<AlbumListRecy
         this.fragmentManager = fragmentManager;
         this.albumList = albumList;
         displayImageOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.video_stub)
-                .showImageForEmptyUri(R.drawable.video_stub)
-                .showImageOnFail(R.drawable.video_stub)
+                .showImageOnLoading(R.drawable.pic_stub_192)
+                .showImageForEmptyUri(R.drawable.pic_stub_192)
+                .showImageOnFail(R.drawable.pic_fail_512)
                 .cacheInMemory(false)
                 .cacheOnDisk(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
@@ -69,18 +69,32 @@ public class AlbumListRecyclerAdapter extends RecyclerView.Adapter<AlbumListRecy
 
     @Override
     public void onBindViewHolder(AlbumListViewHolder holder, final int position) {
-//        holder.photo_null.setText(R.string.test_short);
-//        holder.photo_name.setText(R.string.test_short);
-        String image_url = HttpRequestHandler.getInstance().getAbsoluteUrl(albumList.get(position).getImage_url());
-        ImageLoader.getInstance().displayImage(image_url, holder.photo, displayImageOptions);
-        String title = "";
-        if (albumList.get(position).getTitle().length()> 16)
+        //TODO сделать шапку у альбома
+
+        String image_url = albumList.get(position).getImage_url();
+        if (!image_url.equals(""))
         {
-            title = albumList.get(position).getTitle().substring(0, 16) + "...";
+            if (image_url.contains("uploads") && (!image_url.contains("http") || !image_url.contains("https")))
+            {
+                ImageLoader.getInstance().displayImage(HttpRequestHandler.getInstance().getAbsoluteUrl(image_url), holder.photo, displayImageOptions);
+            }
+            else
+            {
+                ImageLoader.getInstance().displayImage(image_url, holder.photo, displayImageOptions);
+            }
         }
-        else
+
+        String title = "";
+        if (albumList.get(position).getTitle() != null)
         {
-            title = albumList.get(position).getTitle();
+            if (albumList.get(position).getTitle().length() > 16)
+            {
+                title = albumList.get(position).getTitle().substring(0, 16) + "...";
+            }
+            else
+            {
+                title = albumList.get(position).getTitle();
+            }
         }
         holder.title.setText(title);
 //        holder.description.setText(albumList.get(position).getDecription());

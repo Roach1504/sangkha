@@ -37,14 +37,20 @@ public class VideoModel {
 
     public String getVideo_url()
     {
-        if (video_url == null)
+        Document document = Jsoup.parseBodyFragment(text);
+        Element element = document.getElementsByTag("iframe").first();
+        if (element == null)
         {
-            Document document = Jsoup.parseBodyFragment(text);
-            Element element = document.getElementsByTag("iframe").first();
-            video_url = "http:" + element.attr("src");
-            document = null;
-            element = null;
+//            Log.e("ELEMENT", "null");
+            element = document.getElementsByTag("source").first();
+            if (element == null)
+            {
+                return null;
+            }
         }
+
+//        Log.e("ELEMENT", "not null");
+        video_url = element.attr("src");
         return video_url;
     }
 }

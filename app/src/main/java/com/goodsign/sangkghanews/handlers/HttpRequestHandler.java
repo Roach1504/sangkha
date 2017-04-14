@@ -1,12 +1,15 @@
 package com.goodsign.sangkghanews.handlers;
 
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import cz.msebera.android.httpclient.message.BasicHeader;
 import okhttp3.Call;
@@ -46,16 +49,16 @@ public class HttpRequestHandler
         return INSTANCE;
     }
 
-    /*public void get(String url, String param, int value)
+    public void get(String url, int pageNum)
     {
         request = new Request.Builder()
-                .url(getAbsoluteUrl(url)+"?"+param+"="+value)
+                .url(getUrlWithParams(url, pageNum))
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .get()
                 .build();
         call = client.newCall(request);
         new AsyncRequest().execute();
-    }*/
+    }
 
     public void post(String url)
     {
@@ -89,6 +92,22 @@ public class HttpRequestHandler
         //TODO безопасное прерывание работы запроса
     }
 
+    public void requestExternalPayment(BigDecimal amount)
+    {
+        RequestBody body = new FormBody.Builder()
+                .addEncoded("pattern_id","")
+                .addEncoded("instance_id","")
+                .addEncoded("to", "")
+                .addEncoded("amount", amount.toPlainString())
+                .addEncoded("message","")
+                .build();
+    }
+
+    public BigDecimal getAmount(String amount)
+    {
+        return new BigDecimal(amount);
+    }
+
     public void setCallback(Callback callback)
     {
         this.callback = callback;
@@ -109,6 +128,23 @@ public class HttpRequestHandler
         return BASE_URL + relativeUrl;
     }
 
+    public String getUrlWithParams(String relativeUrl, int pageNum)
+    {
+        return getAbsoluteUrl(relativeUrl) + "?" + "page=" + pageNum;
+    }
+
+    public void cancelAllRequests()
+    {
+        for (Call call: client.dispatcher().queuedCalls())
+        {
+            call.cancel();
+        }
+        for (Call call: client.dispatcher().runningCalls())
+        {
+            call.cancel();
+        }
+    }
+
     class AsyncRequest extends AsyncTask <Void, Void, Void>
     {
 
@@ -124,7 +160,8 @@ public class HttpRequestHandler
             }
             catch (IOException e)
             {
-                e.printStackTrace();
+                //e.printStackTrace();
+                callback.onFailure(call, e);
             }
             return null;
         }

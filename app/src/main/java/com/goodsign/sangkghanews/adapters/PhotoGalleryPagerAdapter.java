@@ -34,6 +34,9 @@ public class PhotoGalleryPagerAdapter extends PagerAdapter
         this.images = images;
 
         displayImageOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.pic_stub_192)
+                .showImageForEmptyUri(R.drawable.pic_fail_512)
+                .showImageOnFail(R.drawable.pic_fail_512)
                 .resetViewBeforeLoading(true)
                 .cacheOnDisk(true)
                 .imageScaleType(ImageScaleType.EXACTLY)

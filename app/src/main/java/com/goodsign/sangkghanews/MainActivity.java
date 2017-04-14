@@ -19,7 +19,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.goodsign.sangkghanews.fragments.AboutDevelopers;
 import com.goodsign.sangkghanews.fragments.Album;
 import com.goodsign.sangkghanews.fragments.BackStackResumedFragment;
 import com.goodsign.sangkghanews.fragments.DatsansList;
@@ -31,6 +34,7 @@ import com.goodsign.sangkghanews.fragments.NewsList;
 import com.goodsign.sangkghanews.fragments.VideoList;
 import com.goodsign.sangkghanews.fragments.ZurhaiByDays;
 import com.goodsign.sangkghanews.handlers.HttpRequestHandler;
+import com.goodsign.sangkghanews.handlers.QuoteRandomizer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private TextView header_quote;
 
     private final int WRITE_EXTERNAL_STORAGE_REQUEST = 1;
 
@@ -66,18 +71,29 @@ public class MainActivity extends AppCompatActivity
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        getSupportActionBar().setIcon(R.drawable.ic_koleso48);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("СангкхаOnline");
+        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
         checkPermissions();
 
+        final QuoteRandomizer quoteRandomizer = new QuoteRandomizer();
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.app_name, R.string.app_name);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        header_quote = (TextView) navigationView.getHeaderView(0).findViewById(R.id.navheader_quote);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.app_name, R.string.app_name)
+        {
+            @Override
+            public void onDrawerOpened(View drawerView)
+            {
+                super.onDrawerOpened(drawerView);
+                header_quote.setText(quoteRandomizer.getRandomQuote());
+            }
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
@@ -122,40 +138,44 @@ public class MainActivity extends AppCompatActivity
                     {
                         navigationView.setCheckedItem(R.id.nav_video);
                     }
+                    else if (currentFragment instanceof AboutDevelopers)
+                    {
+                        navigationView.setCheckedItem(R.id.nav_developers);
+                    }
                 }
             }
         });
 
-        class TestConnectServer extends AsyncTask<Void, Void, Void> {
-
-
-
-            protected String getStatus(String key, String strJson) {
-                JSONObject dataJsonObj = null;
-                String secondName = "";
-                try {
-                    dataJsonObj = new JSONObject(strJson);
-                    secondName = dataJsonObj.getString(key);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return secondName;
-            }
-
-            protected Void doInBackground(Void... params) {
-                try {
-
-
-                    Log.e("START CONNECT", "ff");
-                    OkHttpClient client = new OkHttpClient();
-
-                    RequestBody formBody = new FormBody.Builder()
-                            .addEncoded("page", "2")
-                            .build();
-
-
-                    Request request = new Request.Builder()
-.url("http://195.133.144.16/api/news")
+//        class TestConnectServer extends AsyncTask<Void, Void, Void> {
+//
+//
+//
+//            protected String getStatus(String key, String strJson) {
+//                JSONObject dataJsonObj = null;
+//                String secondName = "";
+//                try {
+//                    dataJsonObj = new JSONObject(strJson);
+//                    secondName = dataJsonObj.getString(key);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                return secondName;
+//            }
+//
+//            protected Void doInBackground(Void... params) {
+//                try {
+//
+//
+//                    Log.e("START CONNECT", "ff");
+//                    OkHttpClient client = new OkHttpClient();
+//
+//                    RequestBody formBody = new FormBody.Builder()
+//                            .addEncoded("page", "2")
+//                            .build();
+//
+//
+//                    Request request = new Request.Builder()
+//.url("http://195.133.144.16/api/news")
 //.url("http://195.133.144.16/api/datsans")
 //.url("http://195.133.144.16/api/history")
 //.url("http://195.133.144.16/api/hurals")
@@ -164,49 +184,49 @@ public class MainActivity extends AppCompatActivity
 //.url("http://195.133.144.16/api/photos")
 //.url("http://195.133.144.16/api/videos")
 //.url("http://195.133.144.16/api/zurkhay")
-                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                            .post(formBody)
+//                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+//                            .post(formBody)
 //.get()
-                            .build();
-
-                    okhttp3.Call call = client.newCall(request);
-                    Response response = call.execute();
-                    Callback callback = new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-
-                        }
-                    };
-
-                    callback.onResponse(call, response);
-                    String message = response.body().string().trim();
-
-                    Log.e("ответ от сервера ", message);
-
+//                            .build();
+//
+//                    okhttp3.Call call = client.newCall(request);
+//                    Response response = call.execute();
+//                    Callback callback = new Callback() {
+//                        @Override
+//                        public void onFailure(Call call, IOException e) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onResponse(Call call, Response response) throws IOException {
+//
+//                        }
+//                    };
+//
+//                    callback.onResponse(call, response);
+//                    String message = response.body().string().trim();
+//
+//                    Log.e("ответ от сервера ", message);
+//
 //Log.e(TAG, "message GPS1 = " + message);
 //Log.e(TAG, "Вот прям точно ушли");
 // idreg = getStatus("id",srt);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-            }
-        }
-
-
-        TestConnectServer in1 = new TestConnectServer();
-        in1.execute();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                super.onPostExecute(aVoid);
+//            }
+//        }
+//
+//
+//        TestConnectServer in1 = new TestConnectServer();
+//        in1.execute();
 
 //        Callback callback = new Callback() {
 //            @Override
@@ -223,11 +243,12 @@ public class MainActivity extends AppCompatActivity
 //        HttpRequestHandler.getInstance().setCallback(callback);
 //        HttpRequestHandler.getInstance().postWithParams("/api/news", 1);
 //
-//        if (savedInstanceState == null)
-//        {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.container, NewsList.newInstance()).commit();
-//            navigationView.setCheckedItem(R.id.nav_news);
-//        }
+        if (savedInstanceState == null)
+        {
+            Fragment fragment = NewsList.newInstance();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            navigationView.setCheckedItem(R.id.nav_news);
+        }
 
     }
 
@@ -239,21 +260,21 @@ public class MainActivity extends AppCompatActivity
         if(id==R.id.nav_news)
         {
             Fragment fragment = NewsList.newInstance();
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
         else if(id==R.id.nav_hoorals)
         {
             Fragment fragment = HooralsByDays.newInstance();
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
         else if(id==R.id.nav_astrology)
         {
             Fragment fragment = ZurhaiByDays.newInstance();
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             item.setChecked(true);
         }
         else if(id==R.id.nav_history)
@@ -280,16 +301,22 @@ public class MainActivity extends AppCompatActivity
         else if(id==R.id.nav_photo)
         {
             Fragment fragment = Album.newInstance();
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
         }
         else if(id==R.id.nav_video)
         {
             Fragment fragment = new VideoList();
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             item.setChecked(true);
 //        setTitle(item.getTitle());
+        }
+        else if (id==R.id.nav_developers)
+        {
+            Fragment fragment = AboutDevelopers.newInstance();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+            item.setChecked(true);
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -342,6 +369,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
+            HttpRequestHandler.getInstance().cancelAllRequests();
             if (getSupportFragmentManager().getBackStackEntryCount() > 0)
             {
                 getSupportFragmentManager().popBackStack();

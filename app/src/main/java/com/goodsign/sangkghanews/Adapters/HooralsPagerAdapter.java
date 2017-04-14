@@ -1,5 +1,6 @@
 package com.goodsign.sangkghanews.adapters;
 
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +31,11 @@ public class HooralsPagerAdapter extends FragmentStatePagerAdapter
         super(fm);
         this.hooralsList = hooralsList;
         this.tabLayout = tabLayout;
+    }
+
+    @Override
+    public Parcelable saveState() {
+        return null;
     }
 
     @Override
@@ -66,7 +72,6 @@ public class HooralsPagerAdapter extends FragmentStatePagerAdapter
             try
             {
                 tabLayout.getTabAt(i).setText(getPageTitle(i));
-                Log.e("KEKEKEKEKE", "EKELELEKEK");
             }
             catch (IndexOutOfBoundsException e)
             {

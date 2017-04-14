@@ -1,11 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_photos"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView_photos"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/main.appbar"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/main.collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp">
+            <RelativeLayout
+                android:id="@+id/layout_photos_header"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                app:layout_collapseMode="parallax">
+                <ImageView
+                    android:id="@+id/image_photos_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="170dp"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom">
+                    <LinearLayout
+                        android:id="@+id/layout_album_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary_text_alpha"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/text_photos_header_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textSize="20sp"
+                            android:gravity="left"
+                            android:textColor="@color/white"
+                            android:textAlignment="gravity"
+                            android:padding="2dp"
+                            app:layout_collapseMode="pin"
+                            android:maxLines="1"/>
+                        <TextView
+                            android:id="@+id/text_photos_header_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textSize="14sp"
+                            android:gravity="left"
+                            android:textColor="@color/white"
+                            android:textAlignment="gravity"
+                            android:padding="2dp"
+                            app:layout_collapseMode="pin"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
-</LinearLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView_photos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

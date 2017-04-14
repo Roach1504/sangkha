@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/layout_datsans"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/layout_refresh_datsan"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_weight="90"
+        android:layout_height="0dp">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/frag_datsan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
     </android.support.v4.widget.SwipeRefreshLayout>
+    <LinearLayout
+        android:id="@+id/layout_progress_datsans"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:gravity="center">
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/progressViewDatsans"
+            android:layout_width="48px"
+            android:layout_height="48px"
+            app:pv_autostart="true"
+            app:pv_progressStyle="@style/AppTheme.CircularProgressAccent"
+            app:pv_progressMode="indeterminate"/>
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,7 +1,12 @@
 package com.goodsign.sangkghanews.fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +25,8 @@ import com.goodsign.sangkghanews.R;
 import com.rey.material.widget.ProgressView;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import okhttp3.Call;
@@ -37,6 +44,8 @@ public class NewsList extends Fragment implements BackStackResumedFragment{
     private SwipeRefreshLayout refreshLayout; //отвечает за обновление списка  загрузки инфы с сервера
     private LinearLayout progressLayout;    //хранит ProgressView
     private ProgressView progressView;  //Отображает загрузку старых новостей
+    private Snackbar noConnectionSnackbar; //Выводится, если нет подключения к интернету
+    private LinearLayout layout; //Контейнер верхнего уровня
 
     private ArrayList<NewsModel> newsList;
     private ArrayList<NewsModel> responseList, previousResponseList;
@@ -49,6 +58,29 @@ public class NewsList extends Fragment implements BackStackResumedFragment{
       return new NewsList();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        noConnectionSnackbar = Snackbar.make(layout, R.string.no_connection, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.refresh, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        noConnectionSnackbar.dismiss();
+                        refreshLayout.post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                //если не выполнить setRefreshing, не сработает отображение загрузки
+                                refreshLayout.setRefreshing(true);
+                                loadLastNews();
+                            }
+                        });
+                    }
+                });
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,6 +91,7 @@ public class NewsList extends Fragment implements BackStackResumedFragment{
 
         View view=inflater.inflate(R.layout.fragment_list_news, container,false);
 
+        layout = (LinearLayout) view.findViewById(R.id.layout_news);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_refresh_news);
         refreshLayout.setColorSchemeResources(R.color.accent);
         recyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
@@ -68,20 +101,33 @@ public class NewsList extends Fragment implements BackStackResumedFragment{
         progressLayout.setVisibility(View.GONE);
         progressView.setVisibility(View.GONE);
         layoutManager = new LinearLayoutManager(getActivity());
-//        layoutManager.setReverseLayout(true);
-//        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         newsListRecyclerAdapter = new NewsListRecyclerAdapter(newsList, getContext(), getFragmentManager(), layoutManager);
         recyclerView.setAdapter(newsListRecyclerAdapter);
 
+
+
         /**
          * Этот коллбэк отвечает за обработку свежих новостей
          */
-        lastNewsCallback = new Callback() {
+        lastNewsCallback = new Callback()
+        {
             @Override
-            public void onFailure(Call call, IOException e) {
-                isLoading = false;
+            public void onFailure(Call call, IOException e)
+            {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        noConnectionSnackbar.show();
+                        refreshLayout.setRefreshing(false);
+                        isLoading = false;
+                    }
+                });
+
             }
 
             @Override
@@ -115,9 +161,15 @@ public class NewsList extends Fragment implements BackStackResumedFragment{
             @Override
             public void onFailure(Call call, IOException e)
             {
-                isLoading = false; // отмечаем, что загрузка окончена
-                progressLayout.setVisibility(View.GONE);
-                progressView.setVisibility(View.GONE); //Отключаем отображение загрузки
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        isLoading = false; // отмечаем, что загрузка окончена
+                        progressLayout.setVisibility(View.GONE);
+                        progressView.setVisibility(View.GONE); //Отключаем отображение загрузки
+                    }
+                });
+
             }
 
             @Override
@@ -172,6 +224,10 @@ public class NewsList extends Fragment implements BackStackResumedFragment{
             @Override
             public void onRefresh()
             {
+                if (noConnectionSnackbar.isShown())
+                {
+                    noConnectionSnackbar.dismiss();
+                }
                 loadLastNews(); //загружаем последние новости
             }
         });
@@ -262,19 +318,62 @@ public class NewsList extends Fragment implements BackStackResumedFragment{
 
     private void loadLastNews()
     {
-        isLoading = true; // ставим метку, что идет загрузка
-        HttpRequestHandler.getInstance().setCallback(lastNewsCallback); //устанавливаем, какой коллбэк получит ответ сервера
-        HttpRequestHandler.getInstance().post("/api/news"); //запрашиваем данные (в ответ всегда придет первые 20 ответов (1 страница))
+//        if (isNetworkAvailable())
+//        {
+            isLoading = true; // ставим метку, что идет загрузка
+            HttpRequestHandler.getInstance().setCallback(lastNewsCallback); //устанавливаем, какой коллбэк получит ответ сервера
+            HttpRequestHandler.getInstance().post("/api/news"); //запрашиваем данные (в ответ всегда придет первые 20 ответов (1 страница))
+//        }
+//        else
+//        {
+//            noConnectionSnackbar.show();
+//            refreshLayout.setRefreshing(false);
+//            isLoading = false; //да, избыточно, но я лучше перестрахуюсь
+//        }
     }
 
     private void loadPreviousNews(int pageNum)
     {
-        Log.e("PAGE NUM", pageNum+"");
-        isLoading = true;
-        progressLayout.setVisibility(View.VISIBLE);
-        progressView.setVisibility(View.VISIBLE);
-        HttpRequestHandler.getInstance().setCallback(previousNewsCallback);
-        HttpRequestHandler.getInstance().postWithParams("/api/news", pageNum); //работает аналогично обычному post(), с той разницей
-        //что передает на сервер информацию о том, какую страницу загрузить
+//        if (isNetworkAvailable())
+//        {
+            Log.e("PAGE NUM", pageNum + "");
+            isLoading = true;
+            progressLayout.setVisibility(View.VISIBLE);
+            progressView.setVisibility(View.VISIBLE);
+            HttpRequestHandler.getInstance().setCallback(previousNewsCallback);
+            HttpRequestHandler.getInstance().get("/api/news", pageNum); //работает аналогично обычному post(), с той разницей
+            //что передает на сервер информацию о том, какую страницу загрузить
+//        }
+//        else
+//        {
+//            if (!noConnectionSnackbar.isShown())
+//            {
+//                noConnectionSnackbar.show();
+//                isLoading = false;
+//            }
+//        }
+    }
+
+    public boolean isNetworkAvailable()
+    {
+        ConnectivityManager manager = (ConnectivityManager)  getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (noConnectionSnackbar.isShownOrQueued())
+        {
+            noConnectionSnackbar.dismiss();
+        }
     }
 }
